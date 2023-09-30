@@ -6,17 +6,16 @@ stockfish = Stockfish(
     parameters={"Hash": 2048, "Threads": 6},
 )
 
-position = []
 playing = True
 
 
 while playing:
-    move = input("Enter move: ")
+    position = input("Enter the fen postion or 'q' to quit: ")
 
-    if move == "q":
+    if position == "q":
         break
 
-    position.append(move)
-
-    stockfish.set_position(position)
-    print(stockfish.get_top_moves(3))
+    if stockfish.is_fen_valid(position):
+        stockfish.set_fen_position(position)
+        print(stockfish.get_board_visual())
+        print(stockfish.get_top_moves(3))
