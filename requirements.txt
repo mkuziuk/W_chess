@@ -1,2 +1,3 @@
 stockfish
 opencv-python
+pywin32

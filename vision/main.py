@@ -6,13 +6,16 @@ chessboard_img = cv.imread(
 )
 
 white_rook_img = cv.imread(
-    r"vision\chess_pieces_png\black_rook2.png", cv.IMREAD_UNCHANGED
+    r"vision\chess_pieces_png\white_rook2_no_back.png", cv.IMREAD_UNCHANGED
 )
+# width and hight of the image
+white_rook_w = white_rook_img.shape[1]
+white_rook_h = white_rook_img.shape[0]
 
 result = cv.matchTemplate(chessboard_img, white_rook_img, cv.TM_CCOEFF_NORMED)
 print(str(result) + "\n")
 
-threshold = 0.8
+threshold = 0.6
 locations = np.where(result >= threshold)
 
 print(str(locations) + "\n")
@@ -20,7 +23,14 @@ print(str(locations) + "\n")
 locations = list(zip(*locations[::-1]))
 print(locations)
 
-if locations:
+rectangles = []
+for loc in locations:
+    rect = [int(loc[0]), int(loc[1]), white_rook_w, white_rook_h]
+    rectangles.append(rect)
+
+rectangles, weights = cv.groupRectangles(rectangles, 1, 0.5)
+
+if len(rectangles):
     print("White rook found")
 
     white_rook_w = white_rook_img.shape[1]
@@ -29,9 +39,9 @@ if locations:
     line_type = cv.LINE_4
     line_thickness = 1
 
-    for loc in locations:
-        top_left = loc
-        bottom_right = (top_left[0] + white_rook_w, top_left[1] + white_rook_h)
+    for x, y, w, h in rectangles:
+        top_left = x, y
+        bottom_right = x + w, y + h
 
         cv.rectangle(
             chessboard_img,
