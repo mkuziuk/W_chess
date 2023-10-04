@@ -5,6 +5,7 @@ import win32gui, win32ui, win32con
 class WindowCapture:
     w = 0
     h = 0
+    hwnd = None
 
     def __init__(self, w: int, h: int):
         self.w = w
@@ -12,14 +13,13 @@ class WindowCapture:
 
     def get_screenshot(self):
         # hwnd = win32gui.FindWindow(None, windowname)
-        hwnd = None
 
         # get the window image date
-        wDC = win32gui.GetWindowDC(hwnd)
+        wDC = win32gui.GetWindowDC(self.hwnd)
         dcObj = win32ui.CreateDCFromHandle(wDC)
         cDC = dcObj.CreateCompatibleDC()
         dataBitMap = win32ui.CreateBitmap()
-        dataBitMap.CreateCompatibleBitmap(dcObj, w, h)
+        dataBitMap.CreateCompatibleBitmap(dcObj, self.w, self.h)
         cDC.SelectObject(dataBitMap)
         cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (0, 0), win32con.SRCCOPY)
 
@@ -33,7 +33,7 @@ class WindowCapture:
         # Free Ressources
         dcObj.DeleteDC()
         cDC.DeleteDC()
-        win32gui.ReleaseDC(hwnd, wDC)
+        win32gui.ReleaseDC(self.hwnd, wDC)
         win32gui.DeleteObject(dataBitMap.GetHandle())
 
         # drop alpha channel
