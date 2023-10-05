@@ -21,8 +21,6 @@ class Vision:
 
     # r"vision\chess_pieces_png\white_rook2_no_back.png"
     def find_item(self, screenshot, threshold=0.5, debug_mode=None):
-        # There are 6 methods to choose from:
-
         result = cv.matchTemplate(screenshot, self.item_img, self.method)
 
         # Get the all the positions from the match result that exceed our threshold
@@ -30,7 +28,7 @@ class Vision:
         locations = list(zip(*locations[::-1]))
         # print(locations)
 
-        # First we need to create the list of [x, y, w, h] rectangles
+        # list of [x, y, w, h] rectangles
         rectangles = []
         for loc in locations:
             rect = [int(loc[0]), int(loc[1]), self.item_w, self.item_h]
@@ -44,14 +42,11 @@ class Vision:
 
         points = []
         if len(rectangles):
-            # print('Found item.')
-
             line_color = (0, 255, 0)
             line_type = cv.LINE_4
             marker_color = (0, 255, 0)
             marker_type = cv.MARKER_CROSS
 
-            # Loop over all the rectangles
             for x, y, w, h in rectangles:
                 # Determine the center position
                 center_x = x + int(w / 2)
@@ -85,7 +80,5 @@ class Vision:
 
         if debug_mode:
             cv.imshow("Matches", screenshot)
-            # cv.waitKey()
-            # cv.imwrite('result_click_point.jpg', screenshot)
 
         return points, rectangles
