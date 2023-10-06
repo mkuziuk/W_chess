@@ -23,9 +23,6 @@ class WindowCapture:
         cDC.SelectObject(dataBitMap)
         cDC.BitBlt((0, 0), (self.w, self.h), dcObj, (0, 0), win32con.SRCCOPY)
 
-        # save the screenshot
-        # dataBitMap.SaveBitmapFile(cDC, "debug.bmp")
-
         signedIntsArray = dataBitMap.GetBitmapBits(True)
         img = np.fromstring(signedIntsArray, dtype="uint8")
         img.shape = (self.h, self.w, 4)

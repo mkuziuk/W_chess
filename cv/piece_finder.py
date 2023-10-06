@@ -1,13 +1,14 @@
 import numpy as np
 from .window_capture import WindowCapture
-from .imgs_paths import VisionPaths as vp
+from .values import VisionPaths as vp
+from .values import OtherValues as values
 
 
 class PieceFinder:
-    letters = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    numbers = ["1", "2", "3", "4", "5", "6", "7", "8"]
-    size = 8
     win_cap = None
+    letters = values.letters
+    numbers = values.numbers
+    size = values.size
 
     def __init__(self, win_cap: WindowCapture):
         self.win_cap = win_cap

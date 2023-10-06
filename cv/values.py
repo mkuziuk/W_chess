@@ -26,3 +26,9 @@ class VisionPaths:
     vision_white_pawn = Vision(r"cv\chess_pieces_png\white_p3.png")
     vision_white_pawn2 = Vision(r"cv\chess_pieces_png\white_p4.png")
     vision_black_pawn = Vision(r"cv\chess_pieces_png\black_p2.png")
+
+
+class OtherValues:
+    letters = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    numbers = ["1", "2", "3", "4", "5", "6", "7", "8"]
+    size = 8
