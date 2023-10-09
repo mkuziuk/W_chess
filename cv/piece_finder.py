@@ -9,6 +9,7 @@ class PieceFinder:
     letters = values.letters
     numbers = values.numbers
     size = values.size
+    square_size = ()
 
     def __init__(self, win_cap: WindowCapture):
         self.win_cap = win_cap
@@ -209,6 +210,8 @@ class PieceFinder:
         h = bottom_right_y - top_left_y
         w = bottom_right_x - top_left_x
 
+        self.square_size = (w / self.size, h / self.size)
+
         chessboard_dict = {}
 
         n = top_left_y
@@ -216,7 +219,7 @@ class PieceFinder:
             chessboard_dict[n] = {}
             m = top_left_x
             for j in range(self.size):
-                chessboard_dict[n][m] = f"{self.letters[i]}{self.numbers[j]}"
+                chessboard_dict[n][m] = f"{self.letters[j]}{self.numbers[i]}"
                 m += w / self.size
             n += h / self.size
 

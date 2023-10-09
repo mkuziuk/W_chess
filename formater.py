@@ -17,12 +17,35 @@ class Formater:
         self.win_cap = win_cap
         self.finder = finder
 
-    def format_to_fen(self):
-        screenshot = self.win_cap.get_screenshot()
-        screenshot = cv.cvtColor(screenshot, cv.COLOR_BGR2GRAY)
+    def format_to_fen(self, screenshot: np.ndarray) -> str:
+        pieces_on_board = self.get_pieces_on_board(screenshot)
+
+        return pieces_on_board
+
+    def get_pieces_on_board(self, screenshot: np.ndarray, chessboard_dict: dict) -> dict:
+        pieces_on_board = {}
+
+        for number in self.numbers:
+            for letter in self.letters:
+                pieces_on_board[number + letter] = None
+
+        # screenshot = self.win_cap.get_screenshot()
+        # screenshot = cv.cvtColor(screenshot, cv.COLOR_BGR2GRAY)
 
         all_points_dict = self.__get_all_points(screenshot)
-        chessboard_dict = self.__get_chessboard_dict(screenshot)
+        # chessboard_dict = self.get_chessboard_dict(screenshot)
+
+        result_dict = {}
+        square_w, square_h = self.finder.square_size
+
+        for key, position in chessboard_dict.items():
+            board_x, board_y = position[0]
+            for piece, coords in all_points_dict.items():
+                for x, y in coords:
+                    if x > board_x and y > board_y and x < board_x + square_w and y < board_y + square_h:
+                        result_dict[piece] = key
+
+        return result_dict
 
     def __get_all_points(self, screenshot: np.ndarray) -> dict:
         w_r_points = self.finder.find_white_rook(screenshot)
@@ -58,7 +81,15 @@ class Formater:
             "p": b_p_points,
         }
 
-    def __get_chessboard_dict(self, screenshot: np.ndarray) -> dict:
+    def get_chessboard_dict(self, screenshot: np.ndarray) -> dict:
         chessboard_dict = self.finder.set_chessboard(screenshot)
 
-        return chessboard_dict
+        inverted_dict = {}
+
+        for key, nested_dict in chessboard_dict.items():
+            for nested_key, value in nested_dict.items():
+                if value not in inverted_dict:
+                    inverted_dict[value] = []
+                inverted_dict[value].append((nested_key, key))
+
+        return inverted_dict
