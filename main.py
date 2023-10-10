@@ -14,9 +14,11 @@ while True:
     screenshot = cv.cvtColor(screenshot, cv.COLOR_BGR2GRAY)
 
     chessboard_dict = formater.get_chessboard_dict(screenshot)
-    pieces_on_board = formater.get_pieces_on_board(screenshot, chessboard_dict)
+    all_points_dict = formater.get_all_points(screenshot)
+    pieces_on_board = formater.get_pieces_on_board(screenshot, chessboard_dict, all_points_dict)
 
-    print(chessboard_dict)
+    print(pieces_on_board)
+    print(len(pieces_on_board))
 
     if cv.waitKey(1) == ord("q"):
         cv.destroyAllWindows()

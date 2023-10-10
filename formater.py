@@ -22,32 +22,24 @@ class Formater:
 
         return pieces_on_board
 
-    def get_pieces_on_board(self, screenshot: np.ndarray, chessboard_dict: dict) -> dict:
-        pieces_on_board = {}
-
-        for number in self.numbers:
-            for letter in self.letters:
-                pieces_on_board[number + letter] = None
-
-        # screenshot = self.win_cap.get_screenshot()
-        # screenshot = cv.cvtColor(screenshot, cv.COLOR_BGR2GRAY)
-
-        all_points_dict = self.__get_all_points(screenshot)
-        # chessboard_dict = self.get_chessboard_dict(screenshot)
-
+    def get_pieces_on_board(self, chessboard_dict: dict, all_points_dict: dict) -> dict:
         result_dict = {}
         square_w, square_h = self.finder.square_size
 
-        for key, position in chessboard_dict.items():
-            board_x, board_y = position[0]
-            for piece, coords in all_points_dict.items():
-                for x, y in coords:
+        for piece, coords in all_points_dict.items():
+            for x, y in coords:
+                for key, position in chessboard_dict.items():
+                    board_x, board_y = position[0]
                     if x > board_x and y > board_y and x < board_x + square_w and y < board_y + square_h:
-                        result_dict[piece] = key
+                        result_dict[key] = piece
+
+                    else:
+                        if key not in result_dict:
+                            result_dict[key] = "0"
 
         return result_dict
 
-    def __get_all_points(self, screenshot: np.ndarray) -> dict:
+    def get_all_points(self, screenshot: np.ndarray) -> dict:
         w_r_points = self.finder.find_white_rook(screenshot)
         b_r_points = self.finder.find_black_rook(screenshot)
 
