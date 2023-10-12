@@ -11,7 +11,7 @@ class WindowCapture:
         self.w = w
         self.h = h
 
-    def get_screenshot(self):
+    def get_screenshot(self) -> np.ndarray:
         # hwnd = win32gui.FindWindow(None, windowname)
 
         # get the window image date

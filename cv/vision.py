@@ -8,7 +8,7 @@ class Vision:
     item_h = 0
     method = None
 
-    def __init__(self, item_img_path, method=cv.TM_CCOEFF_NORMED):
+    def __init__(self, item_img_path: str, method=cv.TM_CCOEFF_NORMED):
         self.item_img = cv.imread(item_img_path, cv.IMREAD_UNCHANGED)
         self.item_img = cv.cvtColor(self.item_img, cv.COLOR_BGR2GRAY)
 
@@ -20,7 +20,7 @@ class Vision:
         self.method = method
 
     # r"vision\chess_pieces_png\white_rook2_no_back.png"
-    def find_item(self, screenshot, threshold=0.5, debug_mode=None):
+    def find_item(self, screenshot: np.ndarray, threshold: float = 0.5, debug_mode: str = None) -> list:
         result = cv.matchTemplate(screenshot, self.item_img, self.method)
 
         # Get the all the positions from the match result that exceed our threshold

@@ -1,6 +1,8 @@
+from dataclasses import dataclass
 from .vision import Vision
 
 
+@dataclass
 class VisionPaths:
     vision_top_left_corner = Vision(r"cv\chess_pieces_png\top_left_corner.png")
     vision_bottom_right_corner = Vision(r"cv\chess_pieces_png\bottom_right_corner.png")
@@ -28,6 +30,7 @@ class VisionPaths:
     vision_black_pawn = Vision(r"cv\chess_pieces_png\black_p2.png")
 
 
+@dataclass
 class OtherValues:
     letters = ["a", "b", "c", "d", "e", "f", "g", "h"]
     numbers = ["8", "7", "6", "5", "4", "3", "2", "1"]
