@@ -101,7 +101,7 @@ class PieceFinder:
     def find_white_queen(self, screenshot: np.ndarray) -> list:
         w_q_pos = vp.vision_white_queen.find_item(
             screenshot,
-            threshold=0.9,
+            threshold=0.8,
             debug_mode="rectangles",
         )
 
@@ -112,7 +112,7 @@ class PieceFinder:
     def find_black_queen(self, screenshot: np.ndarray) -> list:
         b_q_pos = vp.vision_black_queen.find_item(
             screenshot,
-            threshold=0.9,
+            threshold=0.85,
             debug_mode="rectangles",
         )
 
@@ -123,18 +123,24 @@ class PieceFinder:
     def find_white_king(self, screenshot: np.ndarray) -> list:
         w_k_pos = vp.vision_white_king.find_item(
             screenshot,
-            threshold=0.9,
+            threshold=0.85,
+            debug_mode="rectangles",
+        )
+        w_k_pos2 = vp.vision_white_king2.find_item(
+            screenshot,
+            threshold=0.85,
             debug_mode="rectangles",
         )
 
         w_k_pts, w_k_rects = w_k_pos
+        w_k_pts2, w_k_rects2 = w_k_pos2
 
-        return w_k_pts
+        return w_k_pts + w_k_pts2
 
     def find_black_king(self, screenshot: np.ndarray) -> list:
         b_k_pos = vp.vision_black_king.find_item(
             screenshot,
-            threshold=0.9,
+            threshold=0.85,
             debug_mode="rectangles",
         )
 
@@ -176,7 +182,7 @@ class PieceFinder:
         # cv.imshow("Computer vision", screenshot)
         top_left_corner_pos = vp.vision_top_left_corner.find_item(
             screenshot,
-            threshold=0.95,
+            threshold=0.9,
             debug_mode="rectangles",
         )
         bottom_right_corner_pos = vp.vision_bottom_right_corner.find_item(

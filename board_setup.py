@@ -4,39 +4,57 @@ from cv.piece_finder import PieceFinder
 from cv.values import OtherValues as values
 
 
-class Setup:
+class SetupBoard:
     finder = None
 
     letters = values.letters
     numbers = values.numbers
     size = values.size
 
-    snapshots = []
-    snapshots_length = 0
+    MAX_DIFF_OF_EMPTY_SPACES = 2
 
     def __init__(self, win_cap: WindowCapture, finder: PieceFinder) -> None:
         self.finder = finder
         self.win_cap = win_cap
+        self.snapshots: list(dict()) = [values.initial_board]
 
-    def check_castling(self, piecs_on_board: dict) -> None:
-        ...
+    def check_castling(self) -> str:
+        castle_str = "KQkq"
+        for snapshot in self.snapshots:
+            # print(snapshot)
+            if snapshot["e1"] != "K":
+                castle_str = castle_str.replace("K", "").replace("Q", "")
+            if snapshot["h1"] != "R":
+                castle_str = castle_str.replace("K", "")
+            if snapshot["a1"] != "R":
+                castle_str = castle_str.replace("Q", "")
+
+            if snapshot["e8"] != "k":
+                castle_str = castle_str.replace("k", "").replace("q", "")
+            if snapshot["h8"] != "r":
+                castle_str = castle_str.replace("k", "")
+            if snapshot["a8"] != "r":
+                castle_str = castle_str.replace("q", "")
+
+        if castle_str == "":
+            castle_str = "-"
+
+        return castle_str
 
     def save_snapshot(self, pieces_on_board: dict) -> None:
-        if pieces_on_board:
-            if not self.snapshots:
-                self.snapshots.append(pieces_on_board)
-            if self.snapshots[-1] != pieces_on_board:
-                self.snapshots.append(pieces_on_board)
+        counter = 0
+        for value in pieces_on_board.values():
+            if value == "0":
+                counter += 1
+        if counter == self.size**2:
+            return
+
+        if self.snapshots[-1] != pieces_on_board:
+            self.snapshots.append(pieces_on_board)
 
     # todo: find the half move clock and the full move
-    def set_data(self):
-        self.snapshots_length = len(self.snapshots)
-        self.half_move_clock = 0
-        for i in range(self.snapshots_length - 1, 0, -1):
-            if [square for square in self.snapshots[i].items] == [
-                square for square in self.snapshots[i - 1]
-            ]:
-                self.half_move_clock += 1
+    def get_fullmove_number(self):
+        return (len(self.snapshots) - 1) // 2 + 1
 
     def get_pieces_on_board(
         self,
